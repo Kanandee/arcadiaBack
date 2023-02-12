@@ -1,13 +1,32 @@
 var createError = require('http-errors');
+var { json } = require('express');
+var cors = require('cors');
 var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 
-var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
+// load environment
+var dotenv = require('dotenv');
+dotenv.config();
+
+var router = require('./router.js');
 
 var app = express();
+
+const corsOptions = {
+  origin: "*",
+  methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+  preflightContinue: false,
+  optionsSuccessStatus: 204,
+};
+
+//middelware
+app.use(json());
+app.use(cors(corsOptions));
+
+// routes
+app.use(router);
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -18,9 +37,6 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
-
-app.use('/', indexRouter);
-app.use('/users', usersRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

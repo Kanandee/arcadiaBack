@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+var mongoose = require ('mongoose');
 mongoose.set("strictQuery", true);
 
 const db = () =>
@@ -11,4 +11,4 @@ const db = () =>
          console.log("Error connecting to MongoDB", error);
       });
 
-export default db;
+module.exports = db;
