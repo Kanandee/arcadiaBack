@@ -1,4 +1,4 @@
-var Game = require ('../models/Game.js');
+let Game = require ('../models/Game.js');
 const axios = require('axios').default;
 
 const GameController = {};

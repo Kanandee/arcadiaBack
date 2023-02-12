@@ -1,4 +1,4 @@
-var { Schema, model } = require('mongoose');
+let { Schema, model } = require('mongoose');
 
 const GameSchema = new Schema(
    {

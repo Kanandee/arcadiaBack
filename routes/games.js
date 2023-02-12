@@ -1,7 +1,7 @@
-var { Router } = require('express');
+let { Router } = require('express');
 const router = Router();
 
-var GameController = require('../controllers/GameController.js');
+let GameController = require('../controllers/GameController.js');
 
 router.get("/", GameController.getAll);
 

@@ -1,18 +1,18 @@
-var createError = require('http-errors');
-var { json } = require('express');
-var cors = require('cors');
-var express = require('express');
-var path = require('path');
-var cookieParser = require('cookie-parser');
-var logger = require('morgan');
+let createError = require('http-errors');
+let { json } = require('express');
+let cors = require('cors');
+let express = require('express');
+let path = require('path');
+let cookieParser = require('cookie-parser');
+let logger = require('morgan');
 
 // load environment
-var dotenv = require('dotenv');
+let dotenv = require('dotenv');
 dotenv.config();
 
-var router = require('./router.js');
+let router = require('./router.js');
 
-var app = express();
+let app = express();
 
 const corsOptions = {
   origin: "*",
