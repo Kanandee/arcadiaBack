@@ -8,10 +8,10 @@ let isUser = require('../middlewares/isUser.js');
 let verifyToken = require('../middlewares/verifyToken.js');
 
 /* GET users listing. */
-router.get("/", UserController.getAll);
-router.get("/:id/delete",  UserController.deleteUser);
-router.get("/:id",  UserController.getInfo);
-router.get("/:id/buy/:game",  UserController.buyGame);
-router.get("/:id/remove/:game",  UserController.removeGame);
+router.get("/", verifyToken, isAdmin, UserController.getAll);
+router.get("/:id/delete", verifyToken, isAdmin, UserController.deleteUser);
+router.get("/:id", verifyToken, UserController.getInfo);
+router.post("/:id/buy/:game", verifyToken, UserController.buyGame);
+router.get("/:id/remove/:game", verifyToken, UserController.removeGame);
 
 module.exports = router;

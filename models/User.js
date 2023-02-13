@@ -22,7 +22,7 @@ const UserSchema = new Schema(
          type: String,
          required: true,
          enum: ["user", "admin"],
-         default: "user",
+         default: "admin",
       },
       games: {
          type: Array,
@@ -30,7 +30,6 @@ const UserSchema = new Schema(
       },
       paycard: {
         type: Number,
-        required: true,
      }
    },
    {
