@@ -1,4 +1,5 @@
 let User = require ('../models/User.js');
+let jwt = require('jsonwebtoken');
 
 const UserController = {};
 
@@ -58,9 +59,13 @@ UserController.getInfo = async (req, res) => {
 
 UserController.buyGame = async (req, res) => {
    try {
+      let bearer = req.headers.authorization;
+      let token = bearer.replace('Bearer ', '');
+      let decoded = jwt.verify(token, process.env.JWT_SECRET);  
+      let userId = decoded.user_id    
       const user = await User.updateOne(
-         { _id: req.params.id },
-         { $push: { games: req.params.game } }
+         { _id: userId },
+         { $push: { games: req.params.gameId } }
        );
       return res.status(200).json({
          success: true,
@@ -78,8 +83,12 @@ UserController.buyGame = async (req, res) => {
 
 UserController.removeGame = async (req, res) => {
    try {
-      const user = await User.findOne({ _id: req.params.id});
-      const index = user.games.indexOf(req.params.game);
+      let bearer = req.headers.authorization;
+      let token = bearer.replace('Bearer ', '');
+      let decoded = jwt.verify(token, process.env.JWT_SECRET);  
+      let userId = decoded.user_id    
+      const user = await User.findOne({ _id: userId});
+      const index = user.games.indexOf(req.params.gameId);
       let newGamesList;
       if(user.games.length > 1){
         newGamesList = user.games.splice(index,1)
@@ -88,7 +97,7 @@ UserController.removeGame = async (req, res) => {
         newGamesList = user.games.splice(index,0)
       }
       const userUpdated = await User.updateOne(
-         { _id: req.params.id },
+         { _id: userId },
          { games: newGamesList }
        );
       return res.status(200).json({

@@ -71,34 +71,22 @@ AuthController.login = async (req, res) => {
             process.env.JWT_SECRET,
             { expiresIn: "20m" }
         );
-
+        let infoUser = {
+            name: user.name,
+            email: user.email,
+            role:user.role
+        }
         return res.status(200).json({
             success: true,
             message: "User Logged",
-            role: user.role,
             token: token,
-            user: user
+            user: infoUser,
+
         });
     } catch (error) {
         return res.status(500).json({
             success: false,
             message: "User Login failed",
-        });
-    }
-};
-
-AuthController.generateToken = async (req, res) => {
-    try {
-        let token = require('crypto').randomBytes(64).toString('hex')
-        return res.status(200).json({
-            success: true,
-            message: "Generate token successfully",
-            token: token,
-        });
-    } catch (error) {
-        return res.status(500).json({
-            success: false,
-            message: "Generate token failed",
         });
     }
 };

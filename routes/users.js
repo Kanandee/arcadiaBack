@@ -11,7 +11,7 @@ let verifyToken = require('../middlewares/verifyToken.js');
 router.get("/", verifyToken, isAdmin, UserController.getAll);
 router.get("/:id/delete", verifyToken, isAdmin, UserController.deleteUser);
 router.get("/:id", verifyToken, UserController.getInfo);
-router.post("/:id/buy/:game", verifyToken, UserController.buyGame);
-router.get("/:id/remove/:game", verifyToken, UserController.removeGame);
+router.post("/buy/:gameId", verifyToken, UserController.buyGame);
+router.get("/remove/:gameId", verifyToken, UserController.removeGame);
 
 module.exports = router;

@@ -22,7 +22,7 @@ const UserSchema = new Schema(
          type: String,
          required: true,
          enum: ["user", "admin"],
-         default: "admin",
+         default: "user",
       },
       games: {
          type: Array,
