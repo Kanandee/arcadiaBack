@@ -33,6 +33,10 @@ const GameSchema = new Schema(
          type: Number,
          required: true,
       },
+      user_id: {
+         type: Schema.ObjectId,
+         ref: "user"
+      },
    },
    {
       timestamps: false,

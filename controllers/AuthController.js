@@ -74,8 +74,8 @@ AuthController.login = async (req, res) => {
         let infoUser = {
             name: user.name,
             email: user.email,
-            role:user.role,
-            id:user._id
+            role: user.role,
+            id: user._id
         }
         return res.status(200).json({
             success: true,

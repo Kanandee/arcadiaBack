@@ -9,9 +9,9 @@ let verifyToken = require('../middlewares/verifyToken.js');
 
 /* GET users listing. */
 router.get("/", verifyToken, isAdmin, UserController.getAll);
-router.get("/:id/delete", verifyToken, isAdmin, UserController.deleteUser);
+router.delete("/:id/delete", verifyToken, isAdmin, UserController.deleteUser);
 router.get("/:id", verifyToken, UserController.getInfo);
 router.post("/buy/:gameId", verifyToken, UserController.buyGame);
-router.get("/remove/:gameId", verifyToken, UserController.removeGame);
+router.delete("/remove/:gameId", verifyToken, UserController.removeGame);
 
 module.exports = router;

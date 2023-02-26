@@ -22,6 +22,8 @@ const UserSchema = new Schema(
          type: String,
          required: true,
          enum: ["user", "admin"],
+         // type: Schema.ObjectId,
+         //  ref: "Role" ,
          default: "user",
       },
       games: {
