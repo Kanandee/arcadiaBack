@@ -39,6 +39,29 @@ UserController.deleteUser = async (req, res) => {
    }
 };
 
+UserController.updateUser = async (req, res) => {
+   try {
+      const { name, email } = req.body;
+      const user = await User.updateOne(
+            { _id: req.params.id },
+            { name: name },
+            { email: email },
+          );
+
+      return res.status(200).json({
+         success: true,
+         message: "Update successfully",
+         results: user,
+      });
+   } catch (error) {
+      return res.status(500).json({
+         success: false,
+         message: "Error update users",
+         error: error.message,
+      });
+   }
+};
+
 UserController.getInfo = async (req, res) => {
    try {
       const user = await User.findOne({ _id: req.params.id});
@@ -62,15 +85,21 @@ UserController.buyGame = async (req, res) => {
       let bearer = req.headers.authorization;
       let token = bearer.replace('Bearer ', '');
       let decoded = jwt.verify(token, process.env.JWT_SECRET);  
-      let userId = decoded.user_id    
-      const user = await User.updateOne(
-         { _id: userId },
-         { $push: { games: req.params.gameId } }
-       );
+      let userId = decoded.user_id  
+      const userfind = await User.findOne({ _id: userId});
+      const index = userfind.games.indexOf(req.params.gameId); 
+      console.log(index)
+      if(index<0){
+         await User.updateOne(
+            { _id: userId },
+            { $push: { games: req.params.gameId } }
+          );
+      } 
+      const userupdate = await User.findOne({ _id: userId});
       return res.status(200).json({
          success: true,
          message: "Game purchased",
-         results: user,
+         results: userupdate,
       });
    } catch (error) {
       return res.status(500).json({
@@ -89,16 +118,10 @@ UserController.removeGame = async (req, res) => {
       let userId = decoded.user_id    
       const user = await User.findOne({ _id: userId});
       const index = user.games.indexOf(req.params.gameId);
-      let newGamesList;
-      if(user.games.length > 1){
-        newGamesList = user.games.splice(index,1)
-      }
-      else{
-        newGamesList = user.games.splice(index,0)
-      }
+      user.games.splice(index,1)
       const userUpdated = await User.updateOne(
          { _id: userId },
-         { games: newGamesList }
+         { games: user.games }
        );
       return res.status(200).json({
          success: true,
