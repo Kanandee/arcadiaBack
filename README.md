@@ -1,6 +1,9 @@
 # Proyecto Backend Arcadia Gaming
 <h3>La base de datos se conecta a través de Docker con MongoDB. Toda la información de los juegos ha sido insertada previamente, gracias a la api de https://api.igdb.com/v4/games. Utilizaremos una variable de entorno .env </h3>
 
+# Diagrama de la Base de datos
+![](/ER.png)
+
 ```
 mongodb://localhost:27017/arcadiaGaming
 ```
