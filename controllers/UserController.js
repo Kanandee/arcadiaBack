@@ -1,5 +1,6 @@
-let User = require ('../models/User.js');
+let User = require('../models/User.js');
 let jwt = require('jsonwebtoken');
+let { hashSync, compareSync } = require('bcrypt');
 
 const UserController = {};
 
@@ -23,7 +24,7 @@ UserController.getAll = async (req, res) => {
 
 UserController.deleteUser = async (req, res) => {
    try {
-      const user = await User.deleteOne({_id: req.params.id});
+      const user = await User.deleteOne({ _id: req.params.id });
 
       return res.status(200).json({
          success: true,
@@ -41,12 +42,17 @@ UserController.deleteUser = async (req, res) => {
 
 UserController.updateUser = async (req, res) => {
    try {
-      const { name, email } = req.body;
+      const { name, password } = req.body;
+      const encryptedPassword = hashSync(password, 10);
       const user = await User.updateOne(
-            { _id: req.params.id },
-            { name: name },
-            { email: email },
-          );
+         {
+            _id: req.params.id
+         },
+         {
+            name: name,
+            password: encryptedPassword,
+         }
+      );
 
       return res.status(200).json({
          success: true,
@@ -64,7 +70,7 @@ UserController.updateUser = async (req, res) => {
 
 UserController.getInfo = async (req, res) => {
    try {
-      const user = await User.findOne({ _id: req.params.id});
+      const user = await User.findOne({ _id: req.params.id });
       console.log(user)
       return res.status(200).json({
          success: true,
@@ -84,18 +90,17 @@ UserController.buyGame = async (req, res) => {
    try {
       let bearer = req.headers.authorization;
       let token = bearer.replace('Bearer ', '');
-      let decoded = jwt.verify(token, process.env.JWT_SECRET);  
-      let userId = decoded.user_id  
-      const userfind = await User.findOne({ _id: userId});
-      const index = userfind.games.indexOf(req.params.gameId); 
-      console.log(index)
-      if(index<0){
+      let decoded = jwt.verify(token, process.env.JWT_SECRET);
+      let userId = decoded.user_id
+      const userfind = await User.findOne({ _id: userId });
+      const index = userfind.games.indexOf(req.params.gameId);
+      if (index < 0) {
          await User.updateOne(
             { _id: userId },
             { $push: { games: req.params.gameId } }
-          );
-      } 
-      const userupdate = await User.findOne({ _id: userId});
+         );
+      }
+      const userupdate = await User.findOne({ _id: userId });
       return res.status(200).json({
          success: true,
          message: "Game purchased",
@@ -114,15 +119,15 @@ UserController.removeGame = async (req, res) => {
    try {
       let bearer = req.headers.authorization;
       let token = bearer.replace('Bearer ', '');
-      let decoded = jwt.verify(token, process.env.JWT_SECRET);  
-      let userId = decoded.user_id    
-      const user = await User.findOne({ _id: userId});
+      let decoded = jwt.verify(token, process.env.JWT_SECRET);
+      let userId = decoded.user_id
+      const user = await User.findOne({ _id: userId });
       const index = user.games.indexOf(req.params.gameId);
-      user.games.splice(index,1)
+      user.games.splice(index, 1)
       const userUpdated = await User.updateOne(
          { _id: userId },
          { games: user.games }
-       );
+      );
       return res.status(200).json({
          success: true,
          message: "Game removed from user",
