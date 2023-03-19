@@ -71,7 +71,6 @@ UserController.updateUser = async (req, res) => {
 UserController.getInfo = async (req, res) => {
    try {
       const user = await User.findOne({ _id: req.params.id });
-      console.log(user)
       return res.status(200).json({
          success: true,
          message: "Get user info retrieved successfully",

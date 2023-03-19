@@ -5,8 +5,6 @@ let jwt = require('jsonwebtoken');
 const AuthController = {};
 
 AuthController.register = async (req, res) => {
-    console.log(req.body);
-
     try {
         const { name, email, password } = req.body;
 
@@ -42,8 +40,6 @@ AuthController.register = async (req, res) => {
 };
 
 AuthController.login = async (req, res) => {
-    console.log(req.headers);
-
     try {
         const { email, password } = req.body;
 
@@ -54,8 +50,6 @@ AuthController.login = async (req, res) => {
                 message: "Email and password are required",
             });
         }
-
-        console.log(req.body)
         const user = await User.findOne({ email: email });
         const isValidPassword = compareSync(password, user.password);
 
